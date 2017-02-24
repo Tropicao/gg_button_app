@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_usb = new UsbManager();
 
     m_tray = new QSystemTrayIcon(this);
-    m_tray->setIcon(QIcon("D:\\gg_button_app\\resources\\gear.xpm"));
+    m_tray->setIcon(QIcon(":/resources/resources/gear.png"));
     m_tray->setToolTip(tr("GG Button Manager"));
     connect(m_tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
                             this, SLOT(displayMenu(QSystemTrayIcon::ActivationReason)));

@@ -34,9 +34,11 @@ HEADERS  += mainwindow.h \
     usbmanager.h
 
 DISTFILES += \
-    resources/gear.png \
-    resources/gear.xpm
+    resources/gear.png
 
 INCLUDEPATH += $$PWD/libusb/include/libusb-1.0
 LIBS += -L$$PWD/libusb/MinGW32/dll/ -lusb-1.0
+
+RESOURCES += \
+    resources.qrc
 
