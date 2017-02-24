@@ -4,9 +4,9 @@
 #include <iostream>
 
 #ifdef DEBUG
-    #define DBG(x)  std::cout<<x<<std::endl
+    #define DBG(...) {fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); fflush(stderr);}
 #else
-    #define DBG(x)
+    #define DBG()
 #endif
 
 #define GG_BUTTON_MAX_SOUND_LIB     5
