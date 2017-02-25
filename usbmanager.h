@@ -5,9 +5,6 @@
 #include <QTimer>
 #include "libusb.h"
 
-#define GG_BUTTON_VID               0x16c0
-#define GG_BUTTON_PID               0x05dc
-#define DEVICE_POLLING_PERIOD_MS    1000
 
 class UsbManager : public QObject
 {
@@ -15,15 +12,19 @@ class UsbManager : public QObject
 public:
     explicit UsbManager(QObject *parent = 0);
     ~UsbManager();
+    void openDevice(libusb_device *dev);
 signals:
     void deviceStatusChanged(bool status);
 
 public slots:
     void checkDevicePresence(void);
+    void sendSyncStatusRequest(void);
+    void sendAsyncStatusRequest(void);
 private:
     libusb_context *m_ctx;
-    libusb_device_handle *m_ggButton;
+    libusb_device_handle *m_deviceHandle;
     QTimer *m_devicePollingTimer;
+    QTimer *m_getSwitchStateTimer;
     bool m_deviceConnected;
 };
 
