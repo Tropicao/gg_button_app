@@ -25,13 +25,15 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    sounditem.cpp \
-    usbmanager.cpp
+        sounditem.cpp \
+        usbmanager.cpp \
+    soundmanager.cpp
 
 HEADERS  += mainwindow.h \
     sounditem.h \
     common.h \
-    usbmanager.h
+    usbmanager.h \
+    soundmanager.h
 
 DISTFILES += \
     resources/gear.png

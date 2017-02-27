@@ -6,10 +6,8 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    m_player = new QMediaPlayer();
-    m_player->setVolume(100);
-
     m_usb = new UsbManager();
+    m_sound = new SoundManager();
 
     m_tray = new QSystemTrayIcon(this);
     m_tray->setIcon(QIcon(":/resources/resources/gear.png"));
@@ -18,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
                             this, SLOT(displayMenu(QSystemTrayIcon::ActivationReason)));
     m_menu = new QMenu(this);
     m_status = new QAction(tr("Disconnected"));
-    connect(m_usb, SIGNAL(deviceStatusChanged(bool)), this, SLOT(setStatus(bool)));
+    connect(m_usb, SIGNAL(deviceConnectionStatusChanged(bool)), this, SLOT(setStatus(bool)));
     m_status->setEnabled(false);
     m_menu->addAction(m_status);
 
@@ -36,12 +34,13 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    delete(m_player);
     for(int i=0; i<GG_BUTTON_MAX_SOUND_LIB; i++)
         delete(m_soundTab[i]);
     delete(m_status);
     delete(m_menu);
     delete(m_tray);
+    delete(m_usb);
+    delete(m_sound);
 
 }
 
@@ -53,9 +52,8 @@ void MainWindow::buildSoundList(void)
     for(int i = 0; i < GG_BUTTON_MAX_SOUND_LIB; i++)
     {
         m_soundTab[i] = new SoundItem();
+        connect(m_soundTab[i], SIGNAL(defaultSoundChanged(QFileInfo)), m_sound, SLOT(setMainSound(QFileInfo)));
         m_menu->insertMenu(NULL, m_soundTab[i]->getMenu());
-        connect(m_soundTab[i], SIGNAL(defaultSoundChanged(QFileInfo)),
-                this, SLOT(updateDefaultSound(QFileInfo)));
     }
 }
 
@@ -71,19 +69,6 @@ void MainWindow::displayMenu(QSystemTrayIcon::ActivationReason reason)
         }
         else
             m_tray->contextMenu()->hide();
-    }
-}
-
-void MainWindow::updateDefaultSound(QFileInfo sound)
-{
-    m_defaultSound = sound;
-    SoundItem *emitter = (SoundItem *)QObject::sender();
-    for(int i=0; i< GG_BUTTON_MAX_SOUND_LIB; i++)
-    {
-        if(m_soundTab[i] == emitter)
-            m_soundTab[i]->check(true);
-        else
-            m_soundTab[i]->check(false);
     }
 }
 

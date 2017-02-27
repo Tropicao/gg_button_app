@@ -14,8 +14,8 @@ public:
     ~UsbManager();
     void openDevice(libusb_device *dev);
 signals:
-    void deviceStatusChanged(bool status);
-
+    void deviceConnectionStatusChanged(bool status);
+    void switchPressed();
 public slots:
     void checkDevicePresence(void);
     void sendSyncStatusRequest(void);
@@ -26,6 +26,7 @@ private:
     QTimer *m_devicePollingTimer;
     QTimer *m_getSwitchStateTimer;
     bool m_deviceConnected;
+    bool m_switchState;
 };
 
 #endif // USBMANAGER_H

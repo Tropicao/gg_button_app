@@ -27,10 +27,12 @@ UsbManager::UsbManager(QObject *parent) : QObject(parent)
 
     if((error = (libusb_error)libusb_init(&m_ctx)) != 0)
         DBG("Cannot initialize usb : %s", libusb_strerror(error));
-    libusb_set_debug(m_ctx, LIBUSB_LOG_LEVEL_DEBUG);
+    libusb_set_debug(m_ctx, LIBUSB_LOG_LEVEL_NONE);
     m_deviceConnected = false;
     m_getSwitchStateTimer = new QTimer();
     connect(m_getSwitchStateTimer, SIGNAL(timeout()), this, SLOT(sendSyncStatusRequest()));
+
+    m_switchState = 0;
 
     if(libusb_has_capability(LIBUSB_CAP_HAS_HOTPLUG))
     {
@@ -111,7 +113,7 @@ void UsbManager::checkDevicePresence()
             {
                 DBG("Device found !");
                 m_deviceConnected = true;
-                emit deviceStatusChanged(m_deviceConnected);
+                emit deviceConnectionStatusChanged(m_deviceConnected);
                 openDevice(dev);
             }
         }
@@ -125,7 +127,7 @@ void UsbManager::checkDevicePresence()
     {
         DBG("Device disconnected")
         m_deviceConnected = false;
-        emit deviceStatusChanged(m_deviceConnected);
+        emit deviceConnectionStatusChanged(m_deviceConnected);
         m_getSwitchStateTimer->stop();
 
     }
@@ -150,14 +152,27 @@ void UsbManager::sendSyncStatusRequest()
                                     data,
                                     SWITCH_STATE_REQUEST_SIZE,
                                     DEVICE_STATUS_RESPONSE_TIMEOUT_MS);
-    if(size < 0)
+    if(size <= 0)
     {
-        DBG("Cannot send request : %s", libusb_strerror((libusb_error)size));
+        if(size < 0)
+        {
+            DBG("Cannot send request : %s", libusb_strerror((libusb_error)size));
+        }
+        else
+            DBG("Cannot parse data : received 0 byte");
         return;
     }
-    DBG("Received %d byte(s) :", size);
-    for(int i = 0; i<size; i++)
-        DBG("[%d] : [%x]", i, data[i]);
+
+    /* Expected format : a singly byte equal to 1 if switch pushed, otherwise 0 */
+    if(data[0] && !m_switchState)
+    {
+        m_switchState = 1;
+        emit switchPressed();
+    }
+    else if(!data[0] && m_switchState)
+    {
+        m_switchState = false;
+    }
 }
 
 

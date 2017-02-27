@@ -7,6 +7,7 @@
 #include <QMediaPlayer>
 #include <sounditem.h>
 #include <UsbManager.h>
+#include <SoundManager.h>
 
 class MainWindow : public QMainWindow
 {
@@ -20,13 +21,11 @@ private:
     QSystemTrayIcon *m_tray;
     QMenu *m_menu;
     QAction *m_status;
-    QMediaPlayer *m_player;
     SoundItem **m_soundTab;
-    QFileInfo m_defaultSound;
     UsbManager *m_usb;
+    SoundManager *m_sound;
 public slots:
     void displayMenu(QSystemTrayIcon::ActivationReason reason);
-    void updateDefaultSound(QFileInfo sound);
     void setStatus(bool status);
 };
 

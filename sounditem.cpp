@@ -49,30 +49,25 @@ SoundItem::~SoundItem()
 
 void SoundItem::loadSoundFile()
 {
-    //SoundItem *sound = (SoundItem *)QObject::sender()->parent()->parent();
-    DBG("Loading file explorer");
-    QFileInfo filename;
-    QFileDialog *fd = new QFileDialog();
-
-    fd->setOption(QFileDialog::DontUseNativeDialog, true);
-    fd->setOption(QFileDialog::DontUseCustomDirectoryIcons, true);
-    fd->exec();
-    //filename = QFileDialog::getOpenFileName(this, tr("Open new sound file"));
-
-    /*if(true)
-    {
-        DBG("Yup, definitely a sound file");
-        sound->m_menu->setTitle("gameboy.mp3");
-        DBG("Sound name set");
+    SoundItem *sound = (SoundItem *)QObject::sender()->parent()->parent();
+    /*QString filename = QFileDialog::getOpenFileName(NULL, tr("Open new sound file"),
+                                            QDir::rootPath(),
+                                            tr("Sound files (*.mp3 *.wav *.ogg)"),
+                                            NULL,
+                                            QFileDialog::DontUseNativeDialog);
+    */
+    /*if(filename != NULL)
+    {*/
+        DBG("File loaded");
+        sound->m_menu->setTitle(tr"gameboy.mp3");
         sound->m_playSound->setEnabled(true);
         sound->m_selectSound->setEnabled(true);
         sound->m_removeSound->setEnabled(true);
-        m_file = new QFileInfo(filename);
-        DBG("New sound loaded !");
     }
     else
-        DBG("No file selected");*/
-    delete(fd);
+    {
+        DBG("No file loaded");
+    }*/
 }
 
 void SoundItem::selectSoundFile()
