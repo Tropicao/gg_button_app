@@ -32,6 +32,43 @@ SoundItem::SoundItem(QWidget *parent) : QWidget(parent)
     connect(m_removeSound, SIGNAL(triggered()), this, SLOT(removeSoundFile()));
 }
 
+SoundItem::SoundItem(QWidget *parent, SoundData *data) : QWidget(parent)
+{
+    nbItem++;
+    m_num = nbItem;
+    m_menu = new QMenu(QString("Sound %1").arg(m_num), this);
+    m_loadSound = new QAction(tr("Select new sound..."), m_menu);
+    connect(m_loadSound, SIGNAL(triggered()), this, SLOT(loadSoundFile()));
+    m_menu->addAction(m_loadSound);
+    m_playSound = new QAction(tr("Play sound"), m_menu);
+    m_menu->addAction(m_playSound);
+    connect(m_playSound, SIGNAL(triggered()), this, SLOT(playSoundFile()));
+    m_selectSound = new QAction(tr("Set this sound as default"), m_menu);
+    m_menu->addAction(m_selectSound);
+    connect(m_selectSound, SIGNAL(triggered()), this, SLOT(selectSoundFile()));
+    m_removeSound = new QAction(tr("Remove sound"), m_menu);
+    m_menu->addAction(m_removeSound);
+    connect(m_removeSound, SIGNAL(triggered()), this, SLOT(removeSoundFile()));
+    if(data && !data->path->isNull())
+    {
+        if(!data->name->isNull())
+        {
+            m_loadSound->setText(*(data->name));
+        }
+        m_file = new QFileInfo(*(data->path));
+        m_playSound->setEnabled(true);
+        m_selectSound->setEnabled(true);
+        m_removeSound->setEnabled(true);
+
+    }
+    else
+    {
+        m_playSound->setEnabled(false);
+        m_selectSound->setEnabled(false);
+        m_removeSound->setEnabled(false);
+    }
+}
+
 SoundItem::~SoundItem()
 {
     delete(m_loadSound);
@@ -49,30 +86,7 @@ SoundItem::~SoundItem()
 
 void SoundItem::loadSoundFile()
 {
-    //SoundItem *sound = (SoundItem *)QObject::sender()->parent()->parent();
-    DBG("Loading file explorer");
-    QFileInfo filename;
-    QFileDialog *fd = new QFileDialog();
 
-    fd->setOption(QFileDialog::DontUseNativeDialog, true);
-    fd->setOption(QFileDialog::DontUseCustomDirectoryIcons, true);
-    fd->exec();
-    //filename = QFileDialog::getOpenFileName(this, tr("Open new sound file"));
-
-    /*if(true)
-    {
-        DBG("Yup, definitely a sound file");
-        sound->m_menu->setTitle("gameboy.mp3");
-        DBG("Sound name set");
-        sound->m_playSound->setEnabled(true);
-        sound->m_selectSound->setEnabled(true);
-        sound->m_removeSound->setEnabled(true);
-        m_file = new QFileInfo(filename);
-        DBG("New sound loaded !");
-    }
-    else
-        DBG("No file selected");*/
-    delete(fd);
 }
 
 void SoundItem::selectSoundFile()
@@ -93,7 +107,14 @@ void SoundItem::removeSoundFile()
 void SoundItem::playSoundFile()
 {
     SoundItem *emitter = (SoundItem *)QObject::sender()->parent()->parent();
-    emit soundTriggered(*(emitter->m_file));
+    if(emitter && m_file)
+    {
+        emit soundTriggered(emitter->m_file->absoluteFilePath());
+    }
+    else
+    {
+        DBG("Missing data, cannot play sound");
+    }
 }
 
 /******************************************************************/

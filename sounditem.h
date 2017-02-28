@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMenu>
 #include <QFileInfo>
+#include <settings.h>
 
 class SoundItem : public QWidget
 {
@@ -11,6 +12,7 @@ class SoundItem : public QWidget
 public:
     static int nbItem;
     explicit SoundItem(QWidget *parent = 0);
+    SoundItem(QWidget *parent, SoundData *data);
     virtual ~SoundItem();
     QMenu *getMenu();
     void enableSoundFile();
@@ -19,7 +21,7 @@ public:
 
 signals:
     void defaultSoundChanged(QFileInfo name);
-    void soundTriggered(QFileInfo soundfile);
+    void soundTriggered(QString filepath);
 
 public slots:
     void loadSoundFile();
