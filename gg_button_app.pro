@@ -27,13 +27,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
         sounditem.cpp \
         usbmanager.cpp \
-    soundmanager.cpp
+    soundmanager.cpp \
+    settings.cpp
 
 HEADERS  += mainwindow.h \
     sounditem.h \
     common.h \
     usbmanager.h \
-    soundmanager.h
+    soundmanager.h \
+    settings.h
 
 DISTFILES += \
     resources/gear.png

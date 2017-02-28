@@ -6,8 +6,13 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    int size = 0;
+    SoundData *data = NULL;
     m_usb = new UsbManager();
     m_sound = new SoundManager();
+
+    m_settings = new Settings();
+    data = m_settings->loadSettings(&size);
 
     m_tray = new QSystemTrayIcon(this);
     m_tray->setIcon(QIcon(":/resources/resources/gear.png"));
@@ -20,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_status->setEnabled(false);
     m_menu->addAction(m_status);
 
-    buildSoundList();
+    buildSoundList(data, size);
 
     m_menu->addSeparator();
     QAction *quitAction = new QAction(tr("Leave"), this);
@@ -44,15 +49,20 @@ MainWindow::~MainWindow()
 
 }
 
-void MainWindow::buildSoundList(void)
+void MainWindow::buildSoundList(SoundData *data, int size)
 {
     if(!m_menu)
         m_menu = new QMenu();
     m_soundTab = new SoundItem*[GG_BUTTON_MAX_SOUND_LIB];
     for(int i = 0; i < GG_BUTTON_MAX_SOUND_LIB; i++)
     {
-        m_soundTab[i] = new SoundItem();
+        if((data != NULL) && (i < size))
+            m_soundTab[i] = new SoundItem(this, &(data[i]));
+        else
+            m_soundTab[i] = new SoundItem(this);
+
         connect(m_soundTab[i], SIGNAL(defaultSoundChanged(QFileInfo)), m_sound, SLOT(setMainSound(QFileInfo)));
+        connect(m_soundTab[i], SIGNAL(soundTriggered(QString)), m_sound, SLOT(playSound(QString)));
         m_menu->insertMenu(NULL, m_soundTab[i]->getMenu());
     }
 }
