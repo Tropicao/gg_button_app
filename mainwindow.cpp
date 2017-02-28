@@ -8,8 +8,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     int size = 0;
     SoundData *data = NULL;
+
     m_usb = new UsbManager();
     m_sound = new SoundManager();
+    connect(m_usb, SIGNAL(switchPressed()), m_sound, SLOT(playDefaultSound()));
 
     m_settings = new Settings();
     data = m_settings->loadSettings(&size);

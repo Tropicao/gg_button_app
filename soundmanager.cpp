@@ -21,7 +21,7 @@ void SoundManager::setMainSound(QFileInfo fileInfo)
 void SoundManager::playDefaultSound()
 {
     DBG("Module asked to play default sound");
-    if(m_defaultSound)
+    if(m_defaultSound->isFile())
     {
         m_player->stop();
         m_player->setMedia(QUrl::fromLocalFile(m_defaultSound->absoluteFilePath()));
@@ -29,7 +29,7 @@ void SoundManager::playDefaultSound()
     }
     else
     {
-        DBG("Default sound not set, will not play sound");
+        DBG("Default sound not found, will not play sound");
     }
 }
 
