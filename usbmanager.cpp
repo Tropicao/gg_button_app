@@ -166,11 +166,13 @@ void UsbManager::sendSyncStatusRequest()
     /* Expected format : a singly byte equal to 1 if switch pushed, otherwise 0 */
     if(data[0] && !m_switchState)
     {
+        DBG("Switched pressed !")
         m_switchState = 1;
         emit switchPressed();
     }
     else if(!data[0] && m_switchState)
     {
+        DBG("Switch released");
         m_switchState = false;
     }
 }
