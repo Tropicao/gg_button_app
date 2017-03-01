@@ -30,6 +30,7 @@ private:
 public slots:
     void displayMenu(QSystemTrayIcon::ActivationReason reason);
     void setStatus(bool status);
+    void updateSelectedSoundGui(QString fileinfo);
 };
 
 #endif // MAINWINDOW_H

@@ -15,7 +15,7 @@ signals:
     void soundTriggered(QString filepath);
 
 public slots:
-    void setMainSound(QFileInfo fileInfo);
+    void setMainSound(QString fileInfo);
     void playDefaultSound();
     void playSound(QString filepath);
 private:

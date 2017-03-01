@@ -35,6 +35,7 @@ SoundItem::SoundItem(QWidget *parent, SoundData *data) : QWidget(parent)
     connect(m_playSound, SIGNAL(triggered()), this, SLOT(playSoundFile()));
     m_selectSound = new QAction(tr("Set this sound as default"), m_menu);
     m_menu->addAction(m_selectSound);
+    connect(m_selectSound, SIGNAL(triggered()), this, SLOT(selectSoundFile()));
     if(data && !data->path->isEmpty())
     {
         DBG("Creating loaded sound item");
@@ -66,6 +67,7 @@ SoundItem::~SoundItem()
 
 void SoundItem::selectSoundFile()
 {
+    DBG("New default sound file asked");
     SoundItem *sound = (SoundItem *)QObject::sender()->parent()->parent();
     emit defaultSoundChanged(sound->m_file->absoluteFilePath());
 }
@@ -95,7 +97,7 @@ QMenu* SoundItem::getMenu()
 void SoundItem::check(bool check)
 {
     if(check)
-        m_menu->setIcon(QIcon("D:\\gg_button_app\\resources\\gear.xpm"));
+        m_menu->setIcon(QIcon(":/resources/resources/gear.png"));
     else
         m_menu->setIcon(QIcon());
 }

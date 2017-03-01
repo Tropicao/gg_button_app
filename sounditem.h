@@ -20,7 +20,7 @@ public:
     void check(bool check);
 
 signals:
-    void defaultSoundChanged(QFileInfo name);
+    void defaultSoundChanged(QString name);
     void soundTriggered(QString filepath);
 
 public slots:

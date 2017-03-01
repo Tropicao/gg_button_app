@@ -13,9 +13,9 @@ SoundManager::~SoundManager()
     delete(m_player);
 }
 
-void SoundManager::setMainSound(QFileInfo fileInfo)
+void SoundManager::setMainSound(QString fileinfo)
 {
-    m_defaultSound->setFile(fileInfo.absoluteFilePath());
+    m_defaultSound->setFile(fileinfo);
 }
 
 void SoundManager::playDefaultSound()

@@ -70,8 +70,9 @@ void MainWindow::buildSoundList(SoundData *data, int size)
         else
             m_soundTab[i] = new SoundItem(this);
 
-        connect(m_soundTab[i], SIGNAL(defaultSoundChanged(QFileInfo)), m_sound, SLOT(setMainSound(QFileInfo)));
+        connect(m_soundTab[i], SIGNAL(defaultSoundChanged(QString)), m_sound, SLOT(setMainSound(QString)));
         connect(m_soundTab[i], SIGNAL(soundTriggered(QString)), m_sound, SLOT(playSound(QString)));
+        connect(m_soundTab[i], SIGNAL(defaultSoundChanged(QString)), this, SLOT(updateSelectedSoundGui(QString)));
         m_menu->insertMenu(NULL, m_soundTab[i]->getMenu());
     }
 }
@@ -103,5 +104,23 @@ void MainWindow::setStatus(bool status)
         m_status->setText(tr("Disconnected"));
         m_status->setEnabled(false);
     }
+}
 
+void MainWindow::updateSelectedSoundGui(QString filepath)
+{
+    Q_UNUSED(filepath)
+    SoundItem *emitter = (SoundItem *)QObject::sender();
+    for(int i=0; i<GG_BUTTON_MAX_SOUND_LIB; i++)
+    {
+        if(m_soundTab[i] == emitter)
+        {
+            DBG("Default sound checked (%d)", i);
+            m_soundTab[i]->check(true);
+        }
+        else
+        {
+            DBG("Sound %d unchecked", i)
+            m_soundTab[i]->check(false);
+        }
+    }
 }

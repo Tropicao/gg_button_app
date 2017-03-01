@@ -39,7 +39,6 @@ SoundData* Settings::loadSettings(int *size)
         {
 
             QFileInfo file_info(m_settings->value("path").toString());
-            std::cout<<file_info.absoluteFilePath().toStdString()<<std::endl;
             if(file_info.exists())
             {
                 *size = i+1;
