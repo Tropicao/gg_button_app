@@ -22,11 +22,18 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
                             this, SLOT(displayMenu(QSystemTrayIcon::ActivationReason)));
     m_menu = new QMenu(this);
+
     m_status = new QAction(tr("Disconnected"));
     connect(m_usb, SIGNAL(deviceConnectionStatusChanged(bool)), this, SLOT(setStatus(bool)));
     m_status->setEnabled(false);
     m_menu->addAction(m_status);
 
+    m_menu->addSeparator();
+    m_settingsGeneration = new QAction ("Generate empty settings file");
+    m_menu->addAction(m_settingsGeneration);
+    connect(m_settingsGeneration, SIGNAL(triggered()), m_settings, SLOT(generateIniSkeleton()));
+
+    m_menu->addSeparator();
     buildSoundList(data, size);
 
     m_menu->addSeparator();

@@ -23,6 +23,7 @@ signals:
     void settingsLoaded(SoundData *data, int size);
 
 public slots:
+    void generateIniSkeleton();
 private:
     QSettings *m_settings;
 

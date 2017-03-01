@@ -22,6 +22,7 @@ private:
     QSystemTrayIcon *m_tray;
     QMenu *m_menu;
     QAction *m_status;
+    QAction *m_settingsGeneration;
     SoundItem **m_soundTab;
     UsbManager *m_usb;
     SoundManager *m_sound;

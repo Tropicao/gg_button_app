@@ -47,3 +47,16 @@ SoundData* Settings::loadSettings(int *size)
     }
     return data;
 }
+
+void Settings::generateIniSkeleton()
+{
+    for(int i=0; i<GG_BUTTON_MAX_SOUND_LIB; i++)
+    {
+        QString current_sound("sound");
+        current_sound.append(QString::number(i));
+        m_settings->beginGroup(current_sound);
+        m_settings->setValue("name", "your_sound_name");
+        m_settings->setValue("path","your_sound_path" );
+        m_settings->endGroup();
+    }
+}
