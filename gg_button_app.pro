@@ -43,6 +43,8 @@ DISTFILES += \
 INCLUDEPATH += $$PWD/libusb/include/libusb-1.0
 LIBS += -L$$PWD/libusb/MinGW32/dll/ -lusb-1.0
 
+RC_ICONS = resources/gear.ico
+
 RESOURCES += \
     resources.qrc
 
