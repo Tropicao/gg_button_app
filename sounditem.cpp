@@ -15,9 +15,6 @@ SoundItem::SoundItem(QWidget *parent) : QWidget(parent)
     nbItem++;
     m_num = nbItem;
     m_menu = new QMenu(QString("Sound %1").arg(m_num), this);
-    m_loadSound = new QAction(tr("Select new sound..."), m_menu);
-    connect(m_loadSound, SIGNAL(triggered()), this, SLOT(loadSoundFile()));
-    m_menu->addAction(m_loadSound);
     m_playSound = new QAction(tr("Play sound"), m_menu);
     m_playSound->setEnabled(false);
     m_menu->addAction(m_playSound);
@@ -37,9 +34,6 @@ SoundItem::SoundItem(QWidget *parent, SoundData *data) : QWidget(parent)
     nbItem++;
     m_num = nbItem;
     m_menu = new QMenu(QString("Sound %1").arg(m_num), this);
-    m_loadSound = new QAction(tr("Select new sound..."), m_menu);
-    connect(m_loadSound, SIGNAL(triggered()), this, SLOT(loadSoundFile()));
-    m_menu->addAction(m_loadSound);
     m_playSound = new QAction(tr("Play sound"), m_menu);
     m_menu->addAction(m_playSound);
     connect(m_playSound, SIGNAL(triggered()), this, SLOT(playSoundFile()));
@@ -49,13 +43,11 @@ SoundItem::SoundItem(QWidget *parent, SoundData *data) : QWidget(parent)
     m_removeSound = new QAction(tr("Remove sound"), m_menu);
     m_menu->addAction(m_removeSound);
     connect(m_removeSound, SIGNAL(triggered()), this, SLOT(removeSoundFile()));
-    if(data && !data->path->isNull())
+    if(data && !data->path->isEmpty())
     {
-        if(!data->name->isNull())
-        {
-            m_loadSound->setText(*(data->name));
-        }
+        DBG("Creating loaded sound item");
         m_file = new QFileInfo(*(data->path));
+        m_menu->setTitle(m_file->fileName());
         m_playSound->setEnabled(true);
         m_selectSound->setEnabled(true);
         m_removeSound->setEnabled(true);
@@ -63,6 +55,7 @@ SoundItem::SoundItem(QWidget *parent, SoundData *data) : QWidget(parent)
     }
     else
     {
+        DBG("Creating empty sound item");
         m_playSound->setEnabled(false);
         m_selectSound->setEnabled(false);
         m_removeSound->setEnabled(false);
@@ -71,7 +64,6 @@ SoundItem::SoundItem(QWidget *parent, SoundData *data) : QWidget(parent)
 
 SoundItem::~SoundItem()
 {
-    delete(m_loadSound);
     delete(m_playSound);
     delete(m_selectSound);
     delete(m_removeSound);
@@ -82,12 +74,6 @@ SoundItem::~SoundItem()
 /****************************************************************/
 /********************* Public slots *****************************/
 /****************************************************************/
-
-
-void SoundItem::loadSoundFile()
-{
-
-}
 
 void SoundItem::selectSoundFile()
 {

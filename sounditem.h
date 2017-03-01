@@ -24,13 +24,11 @@ signals:
     void soundTriggered(QString filepath);
 
 public slots:
-    void loadSoundFile();
     void selectSoundFile();
     void removeSoundFile();
     void playSoundFile();
 private:
     QMenu *m_menu;
-    QAction *m_loadSound;
     QAction *m_playSound;
     QAction *m_selectSound;
     QAction *m_removeSound;

@@ -37,11 +37,17 @@ SoundData* Settings::loadSettings(int *size)
         m_settings->beginGroup(current_sound);
         if (m_settings->contains("name") && m_settings->contains("path"))
         {
-            *size = i+1;
-            if(!data)
-                data = new SoundData[GG_BUTTON_MAX_SOUND_LIB];
-            data[i].name = new QString(m_settings->value("name").toString());
-            data[i].path = new QString(m_settings->value("path").toString());
+
+            QFileInfo file_info(m_settings->value("path").toString());
+            std::cout<<file_info.absoluteFilePath().toStdString()<<std::endl;
+            if(file_info.exists())
+            {
+                *size = i+1;
+                if(!data)
+                    data = new SoundData[GG_BUTTON_MAX_SOUND_LIB];
+                data[i].name = new QString(m_settings->value("name").toString());
+                data[i].path = new QString(m_settings->value("path").toString());
+            }
         }
         m_settings->endGroup();
     }

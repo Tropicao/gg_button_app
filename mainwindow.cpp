@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_menu->addAction(m_status);
 
     m_menu->addSeparator();
-    m_settingsGeneration = new QAction ("Generate empty settings file");
+    m_settingsGeneration = new QAction ("Create/flush settings file");
     m_menu->addAction(m_settingsGeneration);
     connect(m_settingsGeneration, SIGNAL(triggered()), m_settings, SLOT(generateIniSkeleton()));
 
