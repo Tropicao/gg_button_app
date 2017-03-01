@@ -25,13 +25,11 @@ signals:
 
 public slots:
     void selectSoundFile();
-    void removeSoundFile();
     void playSoundFile();
 private:
     QMenu *m_menu;
     QAction *m_playSound;
     QAction *m_selectSound;
-    QAction *m_removeSound;
     QFileInfo *m_file;
     int m_num;
 };

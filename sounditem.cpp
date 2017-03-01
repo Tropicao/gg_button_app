@@ -23,10 +23,6 @@ SoundItem::SoundItem(QWidget *parent) : QWidget(parent)
     m_selectSound->setEnabled(false);
     m_menu->addAction(m_selectSound);
     connect(m_selectSound, SIGNAL(triggered()), this, SLOT(selectSoundFile()));
-    m_removeSound = new QAction(tr("Remove sound"), m_menu);
-    m_removeSound->setEnabled(false);
-    m_menu->addAction(m_removeSound);
-    connect(m_removeSound, SIGNAL(triggered()), this, SLOT(removeSoundFile()));
 }
 
 SoundItem::SoundItem(QWidget *parent, SoundData *data) : QWidget(parent)
@@ -39,10 +35,6 @@ SoundItem::SoundItem(QWidget *parent, SoundData *data) : QWidget(parent)
     connect(m_playSound, SIGNAL(triggered()), this, SLOT(playSoundFile()));
     m_selectSound = new QAction(tr("Set this sound as default"), m_menu);
     m_menu->addAction(m_selectSound);
-    connect(m_selectSound, SIGNAL(triggered()), this, SLOT(selectSoundFile()));
-    m_removeSound = new QAction(tr("Remove sound"), m_menu);
-    m_menu->addAction(m_removeSound);
-    connect(m_removeSound, SIGNAL(triggered()), this, SLOT(removeSoundFile()));
     if(data && !data->path->isEmpty())
     {
         DBG("Creating loaded sound item");
@@ -50,7 +42,6 @@ SoundItem::SoundItem(QWidget *parent, SoundData *data) : QWidget(parent)
         m_menu->setTitle(m_file->fileName());
         m_playSound->setEnabled(true);
         m_selectSound->setEnabled(true);
-        m_removeSound->setEnabled(true);
 
     }
     else
@@ -58,7 +49,6 @@ SoundItem::SoundItem(QWidget *parent, SoundData *data) : QWidget(parent)
         DBG("Creating empty sound item");
         m_playSound->setEnabled(false);
         m_selectSound->setEnabled(false);
-        m_removeSound->setEnabled(false);
     }
 }
 
@@ -66,7 +56,6 @@ SoundItem::~SoundItem()
 {
     delete(m_playSound);
     delete(m_selectSound);
-    delete(m_removeSound);
     delete(m_menu);
     nbItem--;
 }
@@ -79,15 +68,6 @@ void SoundItem::selectSoundFile()
 {
     SoundItem *sound = (SoundItem *)QObject::sender()->parent()->parent();
     emit defaultSoundChanged(sound->m_file->absoluteFilePath());
-}
-
-void SoundItem::removeSoundFile()
-{
-    SoundItem *sound = (SoundItem *)QObject::sender()->parent()->parent();
-    sound->m_menu->setTitle(QString("Sound %1").arg(sound->m_num));
-    sound->m_playSound->setEnabled(false);
-    sound->m_selectSound->setEnabled(false);
-    sound->m_removeSound->setEnabled(false);
 }
 
 void SoundItem::playSoundFile()
