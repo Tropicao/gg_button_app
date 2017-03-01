@@ -26,7 +26,9 @@ UsbManager::UsbManager(QObject *parent) : QObject(parent)
     libusb_error error;
 
     if((error = (libusb_error)libusb_init(&m_ctx)) != 0)
+    {
         DBG("Cannot initialize usb : %s", libusb_strerror(error));
+    }
     libusb_set_debug(m_ctx, LIBUSB_LOG_LEVEL_NONE);
     m_deviceConnected = false;
     m_getSwitchStateTimer = new QTimer();
@@ -159,7 +161,9 @@ void UsbManager::sendSyncStatusRequest()
             DBG("Cannot send request : %s", libusb_strerror((libusb_error)size));
         }
         else
+        {
             DBG("Cannot parse data : received 0 byte");
+        }
         return;
     }
 
