@@ -2,7 +2,7 @@
 #define SETTINGS_H
 
 #include <QObject>
-
+#include <QSettings>
 #define SETTINGS_FILE   "config.json"
 
 typedef struct
@@ -24,7 +24,7 @@ signals:
 
 public slots:
 private:
-    QString m_configName;
+    QSettings *m_settings;
 
 };
 
